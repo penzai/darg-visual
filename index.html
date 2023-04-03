@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            width: 500px;
+            height: 700px;
+            background: lightgray;
+        }
+
+        #imgWrapper {
+            width: 150px;
+            height: 190px;
+            background: skyblue;
+        }
+
+        .drag-item {
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+    <div id="imgWrapper" class="drag-item" draggable="true"></div>
+    <div id="username" class="drag-item" draggable="true">姓名：</div>
+    <div id="cardNo" class="drag-item" draggable="true">工号：</div>
+</div>
+
+<script>
+  const container = document.getElementById('container');
+  let dragStartX = 0;
+  let dragStartY = 0;
+  const { width, height } = container.getBoundingClientRect()
+
+  container.addEventListener('dragstart', e => {
+    dragStartX = e.clientX
+    dragStartY = e.clientY
+  });
+
+  container.addEventListener('drag', e => {
+    if (e.offsetX > width) {
+      resetPosition(e)
+    }
+
+    if (e.offsetY > height) {
+      resetPosition(e)
+    }
+  });
+
+  container.addEventListener('dragend', e => {
+    const dragX = e.clientX - dragStartX
+    const dragY = e.clientY - dragStartY
+    const dragEl = e.target
+    const { left, top } = dragEl.getBoundingClientRect()
+    dragEl.style.left = `${left + dragX}px`;
+    dragEl.style.top = `${top + dragY}px`;
+  });
+
+  function resetPosition(e) {
+    const dragEl = e.target
+    dragEl.style.left = `${dragStartX}px`;
+    dragEl.style.top = `${dragStartY}px`;
+
+    e.preventDefault()
+    e.stopPropagation()
+  }
+</script>
+</body>
+</html>
